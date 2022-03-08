@@ -324,8 +324,10 @@ end)
 
 -- TODO: Make ACF Missiles compliant with ACF legal checks. How to deal with SetNoDraw and SetNotSolid tho
 function MakeACF_Missile(Player, Pos, Ang, Rack, MountPoint, Crate)
-	local Missile = ents.Create("acf_missile")
+    local result = hook.Run("ACF_Missile_PreCreate", Player, Pos, Ang, Rack, MountPoint, Crate)
+    if result == false then return end
 
+	local Missile = ents.Create("acf_missile")
 	if not IsValid(Missile) then return end
 
 	local BulletData = Crate.BulletData

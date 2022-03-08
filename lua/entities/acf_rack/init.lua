@@ -70,6 +70,9 @@ do -- Spawning and Updating --------------------
 	end
 
 	local function UpdateRack(Entity, Data, Rack)
+		local result = HookRun("ACF_Rack_PreUpdate", Entity, Data, Rack)
+		if result == false then return end
+
 		Entity.ACF = Entity.ACF or {}
 		Entity.ACF.Model = Rack.Model -- Must be set before changing model
 
@@ -142,6 +145,8 @@ do -- Spawning and Updating --------------------
 
 			Entity:UpdatePoint()
 		end
+
+		HookRun("ACF_Rack_PostUpdate", Entity, Data, Rack)
 	end
 
 	local function CheckDistantLinks(Entity, Source)
@@ -175,6 +180,9 @@ do -- Spawning and Updating --------------------
 		local Limit = RackData.LimitConVar.Name
 
 		if not Player:CheckLimit(Limit) then return end
+
+		local result = hook.Run("ACF_Rack_PreCreate", Player, Pos, Ang, Data)
+		if result == false then return end
 
 		local Rack = ents.Create("acf_rack")
 
